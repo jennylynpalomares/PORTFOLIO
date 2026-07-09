@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample Case Study — Follow-Up Reminder Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E14; --panel:#10161F; --panel-2:#131B26;
+    --line:rgba(255,255,255,0.08); --text:#E7ECF2; --muted:#8A97A6;
+    --cyan:#4FD1C5; --gold:#E8B85C; --green:#4ADE80;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:
+      radial-gradient(circle at 10% 0%, rgba(79,209,197,0.10), transparent 40%),
+      radial-gradient(circle at 90% 10%, rgba(232,184,92,0.08), transparent 40%),
+      var(--bg);
+    color:var(--text); font-family:'Inter',sans-serif; padding:36px;
+  }
+  .wrap{ max-width:860px; margin:0 auto; }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--cyan); border:1px solid rgba(79,209,197,0.35);
+    background:rgba(79,209,197,0.08); padding:6px 12px; border-radius:20px; margin-bottom:18px;
+  }
+  h1{ font-family:'Space Grotesk',sans-serif; font-size:28px; margin:0 0 8px; }
+  .sub{ color:var(--muted); font-size:14px; margin-bottom:30px; }
+  .card{
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    border:1px solid var(--line); border-radius:14px; padding:26px; margin-bottom:20px;
+  }
+  .card h2{ font-family:'Space Grotesk',sans-serif; font-size:16px; margin:0 0 10px; }
+  .card p{ font-size:14px; color:var(--muted); line-height:1.7; }
+  .steps{ list-style:none; padding:0; margin:0; }
+  .steps li{
+    display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); font-size:13.5px;
+  }
+  .steps li:last-child{ border-bottom:none; }
+  .num{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--cyan);
+    background:rgba(79,209,197,0.12); border-radius:50%; width:22px; height:22px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  pre{
+    background:#070A0F; border:1px solid var(--line); border-radius:10px;
+    padding:18px; overflow-x:auto; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    color:#C8D3DE; line-height:1.6;
+  }
+  .kw{ color:var(--gold); } .fn{ color:var(--cyan); } .cm{ color:#5B6774; }
+  .result{
+    display:flex; align-items:center; gap:10px; font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px; color:var(--green); background:rgba(74,222,128,0.08);
+    border:1px solid rgba(74,222,128,0.25); border-radius:8px; padding:12px 16px;
+  }
+  footer{ text-align:center; margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">● Sample Case Study — Practice Build</span>
+  <h1>Automated Follow-Up Reminders (Google Apps Script)</h1>
+  <div class="sub">A lightweight automation that scans a billing sheet daily and emails a follow-up digest for any account crossing the 45-day threshold — removing the need to manually re-check the aging report every morning.</div>
+
+  <div class="card">
+    <h2>The Problem</h2>
+    <p>Aging reports are only useful if someone checks them consistently. In a manual workflow, accounts quietly slip past the 45-day follow-up window because no one caught it that day.</p>
+  </div>
+
+  <div class="card">
+    <h2>How It Works</h2>
+    <ul class="steps">
+      <li><span class="num">1</span> Script runs on a daily time-based trigger inside Google Sheets</li>
+      <li><span class="num">2</span> Scans the aging column for any account crossing 45+ days outstanding</li>
+      <li><span class="num">3</span> Builds a short digest list of accounts needing same-day follow-up</li>
+      <li><span class="num">4</span> Emails the digest automatically — no one has to remember to check</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Core Script</h2>
+    <pre><span class="cm">// Runs daily via time-based trigger</span>
+<span class="kw">function</span> <span class="fn">sendFollowUpDigest</span>() {
+  <span class="kw">const</span> sheet = SpreadsheetApp.getActiveSheet();
+  <span class="kw">const</span> data = sheet.getDataRange().getValues();
+  <span class="kw">const</span> dueToday = [];
+
+  data.forEach(<span class="kw">function</span>(row, i) {
+    <span class="kw">if</span> (i === 0) <span class="kw">return</span>; <span class="cm">// skip header row</span>
+    <span class="kw">const</span> daysOutstanding = row[7];   <span class="cm">// column H</span>
+    <span class="kw">const</span> status = row[12];          <span class="cm">// column M</span>
+    <span class="kw">if</span> (daysOutstanding > 45 && status !== <span class="cm">'Resolved'</span>) {
+      dueToday.push(row[0] + <span class="cm">' — '</span> + daysOutstanding + <span class="cm">' days'</span>);
+    }
+  });
+
+  <span class="kw">if</span> (dueToday.length > 0) {
+    MailApp.<span class="fn">sendEmail</span>(
+      <span class="cm">'billing@example.com'</span>,
+      <span class="cm">'Follow-Up Digest — '</span> + dueToday.length + <span class="cm">' accounts due today'</span>,
+      dueToday.join(<span class="cm">'\n'</span>)
+    );
+  }
+}</pre>
+  </div>
+
+  <div class="result">✓ Result: zero manually-missed follow-ups across the sample sheet during testing — the digest surfaces overdue accounts automatically every morning.</div>
+
+  <footer>SAMPLE / PRACTICE BUILD · JENNYLYN PALOMARES · FOR PORTFOLIO DEMONSTRATION ONLY</footer>
+</div>
+</body>
+</html>

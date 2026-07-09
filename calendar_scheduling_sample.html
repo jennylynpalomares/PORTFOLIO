@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample — Calendar & Scheduling Coordination</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E14; --panel:#10161F; --panel-2:#131B26;
+    --line:rgba(255,255,255,0.08); --text:#E7ECF2; --muted:#8A97A6;
+    --cyan:#4FD1C5; --gold:#E8B85C; --violet:#9B8CFF; --red:#FF6B6B; --green:#4ADE80;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:
+      radial-gradient(circle at 10% 0%, rgba(232,184,92,0.09), transparent 40%),
+      radial-gradient(circle at 90% 15%, rgba(79,209,197,0.09), transparent 40%),
+      var(--bg);
+    color:var(--text); font-family:'Inter',sans-serif; padding:32px;
+  }
+  .wrap{ max-width:1120px; margin:0 auto; }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--gold); border:1px solid rgba(232,184,92,0.35);
+    background:rgba(232,184,92,0.08); padding:6px 12px; border-radius:20px; margin-bottom:16px;
+  }
+  h1{ font-family:'Space Grotesk',sans-serif; font-size:27px; margin:0 0 6px; }
+  .sub{ color:var(--muted); font-size:14px; margin-bottom:26px; }
+  .card{
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    border:1px solid var(--line); border-radius:14px; padding:22px; margin-bottom:16px;
+  }
+  .card h3{ font-family:'Space Grotesk',sans-serif; font-size:15px; margin:0 0 14px; }
+
+  /* Week calendar */
+  .week{ display:grid; grid-template-columns:60px repeat(5,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .week .cell{ background:var(--panel-2); padding:8px 6px; font-size:11px; min-height:34px; }
+  .week .day-head{ background:rgba(255,255,255,0.03); font-family:'IBM Plex Mono',monospace; text-align:center; color:var(--muted); font-size:10.5px; text-transform:uppercase; letter-spacing:0.05em; padding:10px 4px; }
+  .week .time-head{ background:transparent; }
+  .week .time-label{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); text-align:right; padding:8px 8px 0 0; }
+  .evt{ border-radius:6px; padding:5px 7px; font-size:10.5px; font-weight:600; line-height:1.3; }
+  .evt-client{ background:rgba(79,209,197,0.18); color:var(--cyan); border:1px solid rgba(79,209,197,0.35); }
+  .evt-internal{ background:rgba(155,140,255,0.18); color:var(--violet); border:1px solid rgba(155,140,255,0.35); }
+  .evt-buffer{ background:rgba(232,184,92,0.15); color:var(--gold); border:1px solid rgba(232,184,92,0.3); }
+  .evt-block{ background:rgba(255,107,107,0.15); color:var(--red); border:1px solid rgba(255,107,107,0.3); }
+
+  .legend{ display:flex; gap:18px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin-top:14px; }
+  .dot{ width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:6px; }
+
+  table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  th{ text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; padding:8px 10px; border-bottom:1px solid var(--line); }
+  td{ padding:10px; border-bottom:1px solid var(--line); }
+  .pill{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:3px 9px; border-radius:12px; }
+  .pill-green{ background:rgba(74,222,128,0.15); color:var(--green); }
+  .pill-gold{ background:rgba(232,184,92,0.15); color:var(--gold); }
+  .pill-red{ background:rgba(255,107,107,0.15); color:var(--red); }
+
+  footer{ text-align:center; margin-top:24px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">● Sample / Mock Data — Admin VA Demonstration</span>
+  <h1>Calendar &amp; Scheduling Coordination</h1>
+  <div class="sub">Keeping a busy calendar conflict-free — color-coded by meeting type, buffer time built in, and every request tracked from ask to confirmation.</div>
+
+  <div class="card">
+    <h3>Sample Week View</h3>
+    <div class="week">
+      <div class="cell time-head"></div>
+      <div class="cell day-head">MON</div>
+      <div class="cell day-head">TUE</div>
+      <div class="cell day-head">WED</div>
+      <div class="cell day-head">THU</div>
+      <div class="cell day-head">FRI</div>
+
+      <div class="cell time-label">9 AM</div>
+      <div class="cell"><div class="evt evt-client">Client Call — Shelby</div></div>
+      <div class="cell"></div>
+      <div class="cell"><div class="evt evt-internal">Team Standup</div></div>
+      <div class="cell"></div>
+      <div class="cell"><div class="evt evt-client">Client Call — Rhino Squad</div></div>
+
+      <div class="cell time-label">10 AM</div>
+      <div class="cell"><div class="evt evt-buffer">Buffer / Follow-ups</div></div>
+      <div class="cell"><div class="evt evt-client">Insurance Callback Window</div></div>
+      <div class="cell"></div>
+      <div class="cell"><div class="evt evt-internal">1:1 Check-in</div></div>
+      <div class="cell"></div>
+
+      <div class="cell time-label">11 AM</div>
+      <div class="cell"></div>
+      <div class="cell"></div>
+      <div class="cell"><div class="evt evt-client">Aging Report Review</div></div>
+      <div class="cell"></div>
+      <div class="cell"><div class="evt evt-buffer">Buffer / Follow-ups</div></div>
+
+      <div class="cell time-label">1 PM</div>
+      <div class="cell"><div class="evt evt-block">Focus Block — Data Entry</div></div>
+      <div class="cell"><div class="evt evt-block">Focus Block — Data Entry</div></div>
+      <div class="cell"><div class="evt evt-block">Focus Block — Data Entry</div></div>
+      <div class="cell"><div class="evt evt-block">Focus Block — Data Entry</div></div>
+      <div class="cell"><div class="evt evt-block">Focus Block — Data Entry</div></div>
+
+      <div class="cell time-label">3 PM</div>
+      <div class="cell"></div>
+      <div class="cell"><div class="evt evt-internal">Payer Follow-up Calls</div></div>
+      <div class="cell"></div>
+      <div class="cell"><div class="evt evt-internal">Payer Follow-up Calls</div></div>
+      <div class="cell"></div>
+    </div>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--cyan);"></span>Client Calls</span>
+      <span><span class="dot" style="background:var(--violet);"></span>Internal / Team</span>
+      <span><span class="dot" style="background:var(--gold);"></span>Buffer Time</span>
+      <span><span class="dot" style="background:var(--red);"></span>Protected Focus Blocks</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Scheduling Request Log</h3>
+    <table>
+      <tr><th>Requester</th><th>Purpose</th><th>Proposed Times</th><th>Status</th></tr>
+      <tr><td>Dr. Reyes</td><td>Quarterly review call</td><td>Tue 2–3 PM / Wed 10–11 AM</td><td><span class="pill pill-green">Confirmed</span></td></tr>
+      <tr><td>Aetna Provider Rep</td><td>Fee schedule walkthrough</td><td>Thu 9–9:30 AM</td><td><span class="pill pill-gold">Pending reply</span></td></tr>
+      <tr><td>New client intro (Rhino Squad)</td><td>Paid test debrief</td><td>Fri 9–9:30 AM</td><td><span class="pill pill-green">Confirmed</span></td></tr>
+      <tr><td>Patient — J. Whitfield</td><td>Payment plan discussion</td><td>Mon 3–3:30 PM</td><td><span class="pill pill-red">Rescheduled</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>How This Keeps a Calendar Conflict-Free</h3>
+    <p style="font-size:13.5px; color:#AEB8C2; line-height:1.7; margin:0;">
+      Every meeting type gets its own color so conflicts are visible at a glance. Buffer time is built in after every client
+      call to allow for follow-up notes before the next commitment. Protected focus blocks are treated as real meetings —
+      not left open for anyone to book over. Every scheduling request is logged with proposed times and status, so nothing
+      gets confirmed twice or forgotten in a group chat.
+    </p>
+  </div>
+
+  <footer>SAMPLE / MOCK DATA · JENNYLYN PALOMARES · FOR PORTFOLIO DEMONSTRATION ONLY</footer>
+</div>
+</body>
+</html>

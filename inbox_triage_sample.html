@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample — Executive Inbox Triage System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E14; --panel:#10161F; --panel-2:#131B26;
+    --line:rgba(255,255,255,0.08); --text:#E7ECF2; --muted:#8A97A6;
+    --cyan:#4FD1C5; --gold:#E8B85C; --violet:#9B8CFF; --red:#FF6B6B; --green:#4ADE80;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:
+      radial-gradient(circle at 12% 0%, rgba(79,209,197,0.10), transparent 40%),
+      radial-gradient(circle at 88% 15%, rgba(155,140,255,0.09), transparent 40%),
+      var(--bg);
+    color:var(--text); font-family:'Inter',sans-serif; padding:32px;
+  }
+  .wrap{ max-width:1120px; margin:0 auto; }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--gold); border:1px solid rgba(232,184,92,0.35);
+    background:rgba(232,184,92,0.08); padding:6px 12px; border-radius:20px; margin-bottom:16px;
+  }
+  h1{ font-family:'Space Grotesk',sans-serif; font-size:27px; margin:0 0 6px; }
+  .sub{ color:var(--muted); font-size:14px; margin-bottom:26px; }
+  .grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+  .kpi{
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    border:1px solid var(--line); border-radius:14px; padding:18px;
+  }
+  .kpi .label{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; }
+  .kpi .val{ font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:700; margin:6px 0 2px; }
+  .kpi .sub2{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); }
+  .card{
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    border:1px solid var(--line); border-radius:14px; padding:22px; margin-bottom:16px;
+  }
+  .card h3{ font-family:'Space Grotesk',sans-serif; font-size:15px; margin:0 0 14px; }
+  .row{
+    display:grid; grid-template-columns:110px 1fr 130px 100px;
+    gap:12px; align-items:center; padding:11px 0; border-bottom:1px solid var(--line);
+    font-size:13px;
+  }
+  .row:last-child{ border-bottom:none; }
+  .row.head{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+  .sender{ font-weight:600; }
+  .subj{ color:#C7D0DA; }
+  .tag{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:4px 10px; border-radius:12px; text-align:center; }
+  .tag-urgent{ background:rgba(255,107,107,0.15); color:var(--red); }
+  .tag-fyi{ background:rgba(79,209,197,0.15); color:var(--cyan); }
+  .tag-delegate{ background:rgba(155,140,255,0.15); color:var(--violet); }
+  .tag-done{ background:rgba(74,222,128,0.15); color:var(--green); }
+  .time{ font-family:'IBM Plex Mono',monospace; color:var(--muted); font-size:11.5px; text-align:right; }
+  .legend{ display:flex; gap:18px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin-top:10px; }
+  .dot{ width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:6px; }
+  footer{ text-align:center; margin-top:24px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">● Sample / Mock Data — Admin VA Demonstration</span>
+  <h1>Executive Inbox Triage System</h1>
+  <div class="sub">A structured approach to inbox management — every email sorted into an action category within a same-day SLA, so nothing important sits unread.</div>
+
+  <div class="grid">
+    <div class="kpi"><div class="label">Inbox Volume (Today)</div><div class="val">47</div><div class="sub2">avg. daily intake</div></div>
+    <div class="kpi"><div class="label">Response SLA</div><div class="val">&lt; 4 hrs</div><div class="sub2">for Urgent / Action Needed</div></div>
+    <div class="kpi"><div class="label">Zero-Unread Achieved</div><div class="val">Daily</div><div class="sub2">end-of-day standard</div></div>
+    <div class="kpi"><div class="label">Delegated Items</div><div class="val">6</div><div class="sub2">routed to right owner</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Today's Triage Log</h3>
+    <div class="row head"><span>Time</span><span>From / Subject</span><span>Category</span><span>Status</span></div>
+
+    <div class="row">
+      <span class="time">8:14 AM</span>
+      <div><div class="sender">Blue Shield PPO</div><div class="subj">Re: Claim #10234 — additional documentation requested</div></div>
+      <span class="tag tag-urgent">Urgent</span>
+      <span class="tag tag-done">Replied</span>
+    </div>
+    <div class="row">
+      <span class="time">8:47 AM</span>
+      <div><div class="sender">Dr. Reyes (Internal)</div><div class="subj">Weekly schedule confirmation</div></div>
+      <span class="tag tag-fyi">FYI</span>
+      <span class="tag tag-done">Filed</span>
+    </div>
+    <div class="row">
+      <span class="time">9:20 AM</span>
+      <div><div class="sender">Aetna Provider Relations</div><div class="subj">Fee schedule update — action required by 7/15</div></div>
+      <span class="tag tag-urgent">Urgent</span>
+      <span class="tag tag-done">Replied</span>
+    </div>
+    <div class="row">
+      <span class="time">10:05 AM</span>
+      <div><div class="sender">Newsletter — Practice Mgmt Weekly</div><div class="subj">5 billing trends to watch this quarter</div></div>
+      <span class="tag tag-fyi">FYI</span>
+      <span class="tag tag-done">Archived</span>
+    </div>
+    <div class="row">
+      <span class="time">11:30 AM</span>
+      <div><div class="sender">Patient — M. Alvarez</div><div class="subj">Question about payment plan</div></div>
+      <span class="tag tag-delegate">Delegate</span>
+      <span class="tag tag-fyi" style="background:rgba(232,184,92,0.15); color:var(--gold);">Routed to Billing</span>
+    </div>
+    <div class="row">
+      <span class="time">1:15 PM</span>
+      <div><div class="sender">United Health</div><div class="subj">Claim under medical review — no action needed yet</div></div>
+      <span class="tag tag-fyi">FYI</span>
+      <span class="tag tag-done">Filed</span>
+    </div>
+
+    <div class="legend">
+      <span><span class="dot" style="background:var(--red);"></span>Urgent — same-day response required</span>
+      <span><span class="dot" style="background:var(--cyan);"></span>FYI — read &amp; file, no reply needed</span>
+      <span><span class="dot" style="background:var(--violet);"></span>Delegate — routed to correct owner</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>How This Keeps an Inbox Under Control</h3>
+    <p style="font-size:13.5px; color:#AEB8C2; line-height:1.7; margin:0;">
+      Every email gets sorted into one of four categories within minutes of arrival — Urgent, FYI, Delegate, or Archive.
+      Urgent items get a same-day response SLA. FYI items are read, filed, and never reopened. Delegated items are routed
+      immediately to the right person with context attached, instead of sitting in a shared inbox waiting for someone to notice.
+      The result: zero unread by end of day, and nothing time-sensitive slips through.
+    </p>
+  </div>
+
+  <footer>SAMPLE / MOCK DATA · JENNYLYN PALOMARES · FOR PORTFOLIO DEMONSTRATION ONLY</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample Dashboard — Billing Performance (Mock Data)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E14; --panel:#10161F; --panel-2:#131B26;
+    --line:rgba(255,255,255,0.08); --text:#E7ECF2; --muted:#8A97A6;
+    --cyan:#4FD1C5; --gold:#E8B85C; --violet:#9B8CFF; --red:#FF6B6B; --green:#4ADE80;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:
+      radial-gradient(circle at 15% 0%, rgba(79,209,197,0.10), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(155,140,255,0.10), transparent 40%),
+      var(--bg);
+    color:var(--text); font-family:'Inter',sans-serif; padding:32px;
+  }
+  .wrap{ max-width:1180px; margin:0 auto; }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--gold); border:1px solid rgba(232,184,92,0.35);
+    background:rgba(232,184,92,0.08); padding:6px 12px; border-radius:20px; margin-bottom:16px;
+  }
+  h1{ font-family:'Space Grotesk',sans-serif; font-size:28px; margin:0 0 6px; }
+  .sub{ color:var(--muted); font-size:14px; margin-bottom:28px; }
+  .grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+  .kpi{
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    border:1px solid var(--line); border-radius:14px; padding:20px;
+  }
+  .kpi .label{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; }
+  .kpi .val{ font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700; margin:8px 0 4px; }
+  .kpi .delta{ font-family:'IBM Plex Mono',monospace; font-size:12px; }
+  .up{ color:var(--green); } .down{ color:var(--red); }
+  .row{ display:grid; grid-template-columns:1.4fr 1fr; gap:16px; margin-bottom:16px; }
+  .card{
+    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    border:1px solid var(--line); border-radius:14px; padding:22px;
+  }
+  .card h3{ font-family:'Space Grotesk',sans-serif; font-size:15px; margin:0 0 16px; color:var(--text); }
+  .bars{ display:flex; align-items:flex-end; gap:14px; height:180px; }
+  .bar-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+  .bar{ width:100%; border-radius:6px 6px 0 0; background:linear-gradient(180deg, var(--cyan), rgba(79,209,197,0.35)); }
+  .bar-label{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); margin-top:8px; }
+  .bar-val{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text); margin-bottom:6px; }
+  .donut-wrap{ display:flex; align-items:center; gap:20px; }
+  .legend div{ display:flex; align-items:center; gap:8px; font-size:12.5px; margin-bottom:8px; }
+  .dot{ width:9px; height:9px; border-radius:50%; }
+  table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  th{ text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; padding:8px 10px; border-bottom:1px solid var(--line); }
+  td{ padding:10px; border-bottom:1px solid var(--line); }
+  .pill{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:3px 9px; border-radius:12px; }
+  .pill-red{ background:rgba(255,107,107,0.15); color:var(--red); }
+  .pill-green{ background:rgba(74,222,128,0.15); color:var(--green); }
+  footer{ text-align:center; margin-top:30px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">● Sample Dashboard — Mock Data for Demonstration</span>
+  <h1>Billing Performance Overview</h1>
+  <div class="sub">Built in Power BI / Excel Power Query · Illustrative dataset — not tied to a real client account</div>
+
+  <div class="grid">
+    <div class="kpi"><div class="label">Total Billed (MTD)</div><div class="val">$84,210</div><div class="delta up">▲ 6.2% vs last month</div></div>
+    <div class="kpi"><div class="label">Collected (MTD)</div><div class="val">$71,940</div><div class="delta up">▲ 4.8%</div></div>
+    <div class="kpi"><div class="label">Avg. Days to Collect</div><div class="val">34</div><div class="delta down">▼ 3 days</div></div>
+    <div class="kpi"><div class="label">Accounts &gt; 45 Days</div><div class="val">18</div><div class="delta down">▼ 5 accounts</div></div>
+  </div>
+
+  <div class="row">
+    <div class="card">
+      <h3>Claims Resolved by Week</h3>
+      <div class="bars">
+        <div class="bar-col"><div class="bar-val">22</div><div class="bar" style="height:55%;"></div><div class="bar-label">W1</div></div>
+        <div class="bar-col"><div class="bar-val">28</div><div class="bar" style="height:70%;"></div><div class="bar-label">W2</div></div>
+        <div class="bar-col"><div class="bar-val">19</div><div class="bar" style="height:48%;"></div><div class="bar-label">W3</div></div>
+        <div class="bar-col"><div class="bar-val">34</div><div class="bar" style="height:85%;"></div><div class="bar-label">W4</div></div>
+        <div class="bar-col"><div class="bar-val">40</div><div class="bar" style="height:100%;"></div><div class="bar-label">W5</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Aging Bucket Mix</h3>
+      <div class="donut-wrap">
+        <svg width="120" height="120" viewBox="0 0 36 36">
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="#1c2531" stroke-width="4"></circle>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="#4FD1C5" stroke-width="4" stroke-dasharray="42 58" stroke-dashoffset="25"></circle>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="#E8B85C" stroke-width="4" stroke-dasharray="26 74" stroke-dashoffset="-17"></circle>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="#9B8CFF" stroke-width="4" stroke-dasharray="18 82" stroke-dashoffset="-43"></circle>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="#FF6B6B" stroke-width="4" stroke-dasharray="14 86" stroke-dashoffset="-61"></circle>
+        </svg>
+        <div class="legend">
+          <div><span class="dot" style="background:#4FD1C5;"></span>0–30 days · 42%</div>
+          <div><span class="dot" style="background:#E8B85C;"></span>31–45 days · 26%</div>
+          <div><span class="dot" style="background:#9B8CFF;"></span>46–60 days · 18%</div>
+          <div><span class="dot" style="background:#FF6B6B;"></span>60+ days · 14%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Top Accounts Needing Attention</h3>
+    <table>
+      <tr><th>Account</th><th>Payer</th><th>Balance</th><th>Days Out</th><th>Status</th></tr>
+      <tr><td>Carter, B.</td><td>Cigna PPO</td><td>$690.00</td><td>142</td><td><span class="pill pill-red">Escalate</span></td></tr>
+      <tr><td>Whitfield, J.</td><td>Aetna HMO</td><td>$900.00</td><td>100</td><td><span class="pill pill-red">Escalate</span></td></tr>
+      <tr><td>Reyes, M.</td><td>United Health</td><td>$310.00</td><td>119</td><td><span class="pill pill-red">Escalate</span></td></tr>
+      <tr><td>Alvarez, D.</td><td>Cigna PPO</td><td>$0.00</td><td>—</td><td><span class="pill pill-green">Resolved</span></td></tr>
+    </table>
+  </div>
+
+  <footer>SAMPLE / MOCK DATA · BUILT BY JENNYLYN PALOMARES · FOR PORTFOLIO DEMONSTRATION ONLY</footer>
+</div>
+</body>
+</html>
